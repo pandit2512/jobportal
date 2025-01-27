@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,12 +17,15 @@ import com.learn.jobportal.services.CustomUserDetailsService;
 public class WebSecurityConfig {
 
 	private final CustomUserDetailsService customUserDetailsService;
+	//creating reference for success handler
+	private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 	
 	//Creating Constructor inject for above field
 	@Autowired
-	public WebSecurityConfig(CustomUserDetailsService customUserDetailsService) {
+	public WebSecurityConfig(CustomUserDetailsService customUserDetailsService,CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
 		
 		this.customUserDetailsService = customUserDetailsService;
+	    this.customAuthenticationSuccessHandler=customAuthenticationSuccessHandler;
 	}
 
 	//below a list of public URL's, No need for user to login
@@ -58,6 +62,14 @@ public class WebSecurityConfig {
 				auth.anyRequest().authenticated();
 				
 				});
+				//creating custom login page & success handler
+				http.formLogin(form ->form.loginPage("/login").permitAll().successHandler(customAuthenticationSuccessHandler))
+				             .logout(logout->{
+				            	 logout.logoutUrl("/logout");
+				            	 logout.logoutSuccessUrl("/");
+				             }).cors(Customizer.withDefaults())
+				               .csrf(csrf->csrf.disable());
+				                                     
 				
 				return http.build();
 	}
