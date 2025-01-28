@@ -62,6 +62,7 @@ public class WebSecurityConfig {
 				auth.anyRequest().authenticated();
 				
 				});
+				
 				//creating custom login page & success handler
 				http.formLogin(form ->form.loginPage("/login").permitAll().successHandler(customAuthenticationSuccessHandler))
 				             .logout(logout->{
