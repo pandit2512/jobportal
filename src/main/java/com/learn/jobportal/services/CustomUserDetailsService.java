@@ -15,10 +15,10 @@ import com.learn.jobportal.util.CustomUserDetails;
 public class CustomUserDetailsService implements UserDetailsService {
 
 	//1.Adding reference to userRepository that we have created
+	@Autowired
 	private final UsersRepository usersRepository;
 	
 	//2.Adding Constructor injection for above
-	@Autowired
 	public CustomUserDetailsService(UsersRepository usersRepository) {
 		
 		this.usersRepository = usersRepository;

@@ -3,6 +3,7 @@ package com.learn.jobportal.services;
 import java.util.Date;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,12 +21,15 @@ import com.learn.jobportal.repository.UsersRepository;
 
 @Service
 public class UsersService {
-
+    @Autowired
 	private final UsersRepository usersRepository;
 	//----------------------
-	private final JobSeekerProfileRepository jobSeekerProfileRepository;
+	@Autowired
+    private final JobSeekerProfileRepository jobSeekerProfileRepository;
+	@Autowired
 	private final RecruiterProfileRepository recruiterProfileRepository;
    //----------------- 
+	@Autowired
 	private final PasswordEncoder passwordEncoder;
 	
 	//now inject these in constructor
