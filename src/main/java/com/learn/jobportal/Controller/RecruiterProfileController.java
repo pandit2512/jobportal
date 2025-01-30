@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ import com.learn.jobportal.entity.RecruiterProfile;
 import com.learn.jobportal.entity.Users;
 import com.learn.jobportal.repository.UsersRepository;
 import com.learn.jobportal.services.RecruiterProfileService;
+import com.learn.jobportal.util.FileUploadUtil;
 
 @Controller
 @RequestMapping("/recruiter-profile")
@@ -54,7 +56,8 @@ public class RecruiterProfileController {
 	}
 	
 	//-----------V-24: recruiter profile add----
-    public String addNew(RecruiterProfile recruiterProfile,@RequestParam("image") 
+    @PostMapping("/addNew")
+	public String addNew(RecruiterProfile recruiterProfile,@RequestParam("image") 
                         MultipartFile multipartFile, Model model) {
     	
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -89,7 +92,14 @@ public class RecruiterProfileController {
     	//setting the upoad directory
     	String uploadDir = "photos/recruiter/" + savedUser.getUserAccountId();
     	
-    	return null;
+    	//here making use of FileUploadUtil class
+    	//multipartfile-> Read Profile image from request
+    	try {
+    		FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+    	}catch(Exception ex) {
+    		ex.printStackTrace();
+    	}
+    	return "redirect:/dashboard/";
     }
 }
 

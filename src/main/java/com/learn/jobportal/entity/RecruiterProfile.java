@@ -1,5 +1,7 @@
 package com.learn.jobportal.entity;
 
+import java.beans.Transient;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -40,5 +42,16 @@ public class RecruiterProfile {
 	@JoinColumn(name = "user_account_id")
 	@MapsId
 	private Users userId;
+	
+	//------------
+	
+	@Transient  // means we are not processing it in database
+	public String getPhotosImagePath() {
+		if(profilePhoto == null) return null;
+		
+		return "/photos/recruiter/"+userAccountId+"/"+profilePhoto;
+		
+	}
+	
 	
 }

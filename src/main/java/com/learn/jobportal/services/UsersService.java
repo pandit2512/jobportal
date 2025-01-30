@@ -79,7 +79,8 @@ public class UsersService {
 		if(!(authentication instanceof AnonymousAuthenticationToken)) {
 			
 			String username=authentication.getName();
-		    Users user= usersRepository.findByEmail(username).orElseThrow(()-> new UsernameNotFoundException("Could not found"+"user"));
+		    Users user= usersRepository.findByEmail(username).orElseThrow(()-> 
+		                 new UsernameNotFoundException("Could not found"+"user"));
 		
 		    int userId=user.getUserId();
 		    if(authentication.getAuthorities().contains(new SimpleGrantedAuthority("Recruiter"))) {
@@ -95,6 +96,20 @@ public class UsersService {
 		
 		}
 		
+		return null;
+	}
+//---this method is used in JobPostActivityController 
+	public Users getCurrentUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		if(!(authentication instanceof AnonymousAuthenticationToken)) {
+			
+			String username = authentication.getName();
+		    Users user= usersRepository.findByEmail(username).orElseThrow(()-> 
+		                      new UsernameNotFoundException("Could not found"+"user"));
+	
+		    return user;
+		}
 		return null;
 	}
 }
