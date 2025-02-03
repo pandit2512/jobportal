@@ -1,5 +1,6 @@
 package com.learn.jobportal.entity;
 
+import java.beans.Transient;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -28,7 +29,7 @@ public class JobSeekerProfile {
 	}
 	//------------------------
 	@Id
-	private int userAccountId;
+	private Integer userAccountId;
 	
 	private String firstName;
 	private String lastName;
@@ -42,6 +43,7 @@ public class JobSeekerProfile {
 	@Column(nullable = true,length = 64)
 	private String profilePhoto;
 	
+	//---------------------
 	@OneToOne
 	@JoinColumn(name="user_account_id")
 	@MapsId
@@ -52,4 +54,13 @@ public class JobSeekerProfile {
 			"jobSeekerProfile")
 	private List<Skills> skills;
 
+	//-----------Updating Jobseeker profile.
+	
+	@Transient
+	public String getPhotosImagePath() {
+		if (profilePhoto==null || userAccountId == null)
+			return null;
+		return "/photos/candidate/"+userAccountId+ "/"+ profilePhoto;
+			
+	}
 }
