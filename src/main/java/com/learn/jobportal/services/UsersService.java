@@ -112,4 +112,12 @@ public class UsersService {
 		}
 		return null;
 	}
+
+	// used in jobseeker applycontroller
+	public Users findByEmail(String currentUsername) {
+		return usersRepository.findByEmail(currentUsername).orElseThrow(()
+				-> new UsernameNotFoundException("User not found"));
+	}
+
+	
 }

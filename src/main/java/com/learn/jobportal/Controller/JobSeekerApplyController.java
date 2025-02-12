@@ -2,7 +2,9 @@ package com.learn.jobportal.Controller;
 
 import org.springframework.stereotype.Controller;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -12,12 +14,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.learn.jobportal.entity.JobPostActivity;
 import com.learn.jobportal.entity.JobSeekerApply;
 import com.learn.jobportal.entity.JobSeekerProfile;
 import com.learn.jobportal.entity.JobSeekerSave;
 import com.learn.jobportal.entity.RecruiterProfile;
+import com.learn.jobportal.entity.Users;
 import com.learn.jobportal.services.JobPostActivityService;
 import com.learn.jobportal.services.JobSeekerApplyService;
 import com.learn.jobportal.services.JobSeekerProfileService;
@@ -83,6 +87,7 @@ public class JobSeekerApplyController {
                             break;
                         }
                     }
+                    //Adding flags to actual model
                     model.addAttribute("alreadyApplied", exists);
                     model.addAttribute("alreadySaved", saved);
                 }
@@ -96,5 +101,28 @@ public class JobSeekerApplyController {
        // adding users info to model
         model.addAttribute("user", usersService.getCurrentUserProfile());
         return "job-details";
+    }
+    
+    //controller for searching and applying for job
+    @PostMapping("job-details/apply/{id}")
+    public String apply(@PathVariable("id") int id, JobSeekerApply jobSeekerApply) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUsername = authentication.getName();
+            Users user = usersService.findByEmail(currentUsername);
+            Optional<JobSeekerProfile> seekerProfile = jobSeekerProfileService.getOne(user.getUserId());
+            JobPostActivity jobPostActivity = jobPostActivityService.getOne(id);
+            if (seekerProfile.isPresent() && jobPostActivity != null) {
+                jobSeekerApply = new JobSeekerApply();
+                jobSeekerApply.setUserId(seekerProfile.get());
+                jobSeekerApply.setJob(jobPostActivity);
+                jobSeekerApply.setApplyDate(new Date());
+            } else {
+                throw new RuntimeException("User not found");
+            }
+            jobSeekerApplyService.addNew(jobSeekerApply);
+        }
+
+        return "redirect:/dashboard/";
     }
 }

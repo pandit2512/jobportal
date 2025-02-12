@@ -29,6 +29,8 @@ public class JobSeekerApplyService {
         return jobSeekerApplyRepository.findByJob(job);
     }
 //After Adding above business logic you can use it in controller
+    
+    //method used in jobseekerapply controller
     public void addNew(JobSeekerApply jobSeekerApply) {
         jobSeekerApplyRepository.save(jobSeekerApply);
     }

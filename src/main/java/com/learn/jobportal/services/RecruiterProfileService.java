@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.learn.jobportal.entity.RecruiterProfile;
@@ -23,7 +24,7 @@ public class RecruiterProfileService {
 
     
 	public RecruiterProfileService(RecruiterProfileRepository recruiterRepository, UsersRepository usersRepository) {
-		super();
+		
 		this.recruiterRepository = recruiterRepository;
 		this.usersRepository = usersRepository;
 	}
@@ -38,7 +39,7 @@ public class RecruiterProfileService {
 	}
 
 	//----------Used this method in JobSeekerApplyController
-	public static RecruiterProfile getCurrentRecruiterProfile() {
+	public  RecruiterProfile getCurrentRecruiterProfile() {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
