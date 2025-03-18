@@ -32,8 +32,10 @@ import com.learn.jobportal.services.UsersService;
 @Controller
 public class JobSeekerApplyController {
 
+	@Autowired
     private final JobPostActivityService jobPostActivityService;
     
+	@Autowired
     private final UsersService usersService;
 //--------During adding code for "Applying" a job
     private final JobSeekerApplyService jobSeekerApplyService;
@@ -41,7 +43,7 @@ public class JobSeekerApplyController {
     private final RecruiterProfileService recruiterProfileService;
     private final JobSeekerProfileService jobSeekerProfileService;
     
-    @Autowired
+    
     public JobSeekerApplyController(JobPostActivityService jobPostActivityService, UsersService usersService,
     		JobSeekerApplyService jobSeekerApplyService,
     		JobSeekerSaveService jobSeekerSaveSerice,
