@@ -30,12 +30,13 @@ public class JobSeekerApply implements Serializable {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @ManyToOne(cascade = CascadeType.ALL)
+//Remove all cascade types from JobSeekerApply as we
+// have cascade property on JobSeekerProfile and JobPostActivity
+    @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "user_account_id")
     private JobSeekerProfile userId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "job", referencedColumnName = "jobPostId")
     private JobPostActivity job;
 

@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.learn.jobportal.dto.RecruiterJobsDto;
 import com.learn.jobportal.entity.JobCompany;
@@ -14,6 +15,9 @@ import com.learn.jobportal.entity.JobLocation;
 import com.learn.jobportal.entity.JobPostActivity;
 import com.learn.jobportal.entity.RecruiterJobs;
 import com.learn.jobportal.repository.JobPostActivityRepository;
+import com.learn.jobportal.repository.JobSeekerApplyRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class JobPostActivityService {
@@ -21,9 +25,12 @@ public class JobPostActivityService {
 	@Autowired
 	private final JobPostActivityRepository jobPostActivityRepository;
 	
-	public JobPostActivityService(JobPostActivityRepository jobPostActivityRepository) {
+	@Autowired
+	private final  JobSeekerApplyRepository  jobSeekerApplyRepository;
+	
+	public JobPostActivityService(JobPostActivityRepository jobPostActivityRepository,JobSeekerApplyRepository  jobSeekerApplyRepository) {
 		this.jobPostActivityRepository=jobPostActivityRepository;
-		
+		this.jobSeekerApplyRepository=jobSeekerApplyRepository;
 	}
 	
 	
@@ -71,5 +78,13 @@ public class JobPostActivityService {
 			   jobPostActivityRepository.search(job, location, remote, type, searchDate);
 	
 	}
+	
+	//Create deleteById method in JobPostActivityService with @Transactional annotation
+	 @Transactional
+	    public void deleteById(int id) {
+	        JobPostActivity jobPost = jobPostActivityRepository.findById(id).orElseThrow(() -> new    EntityNotFoundException("Job post not found"));
+	        jobSeekerApplyRepository.deleteByJob(jobPost);
+	        jobPostActivityRepository.deleteById(id);
+	    }
 	
 }

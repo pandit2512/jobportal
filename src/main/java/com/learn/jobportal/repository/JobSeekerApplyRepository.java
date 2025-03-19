@@ -16,4 +16,10 @@ public interface JobSeekerApplyRepository extends JpaRepository<JobSeekerApply, 
 	 List<JobSeekerApply> findByUserId(JobSeekerProfile userId);
 
 	    List<JobSeekerApply> findByJob(JobPostActivity job);
+
+
+	    //To delete a job by its id
+	    void deleteByJob(JobPostActivity jobPostActivity);
+
+
 }

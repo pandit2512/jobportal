@@ -287,4 +287,11 @@ public class JobPostActivityController {
 	   return "add-jobs";
 	   
    }
+   
+   //Added deleteJob controller method in JobPostActivityController
+   @PostMapping("dashboard/deleteJob/{id}")
+   public String deleteJob(@PathVariable("id") int id, Model model) {
+       jobPostActivityService.deleteById(id);
+       return "redirect:/dashboard/";
+   }	
 }
